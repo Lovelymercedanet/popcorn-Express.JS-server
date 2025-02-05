@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
-const { getAllUsers } = require("../controls/userControls");
+const { fetchAllUsers, getAllUsers } = require("../controls/userControls");
 
 router.get("/users", getAllUsers)
 
@@ -16,7 +16,10 @@ router.post("/register", async (req, res) => {
     try {
         const newUser = new User({ username, password });
         /* */
-
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ error: "User already exists" });
+        }
         /* */
         await newUser.save();
         res.status(201).json({ message: "User registered successfully" });

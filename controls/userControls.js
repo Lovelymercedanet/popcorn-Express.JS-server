@@ -1,6 +1,16 @@
 const User = require("../models/User");
 
-// Получить всех пользователей
+// Функция для получения всех пользователей
+const fetchAllUsers = async () => {
+    try {
+        const userData = await User.find();
+        return userData; // Возвращаем список пользователей
+    } catch (error) {
+        throw new Error("Error fetching users: " + error.message);
+    }
+};
+
+// Middleware для маршрута, чтобы вернуть всех пользователей
 const getAllUsers = async (req, res) => {
     try {
         const userData = await User.find()
@@ -13,4 +23,4 @@ const getAllUsers = async (req, res) => {
     }
 }
 
-module.exports = { getAllUsers }
+module.exports = { fetchAllUsers, getAllUsers }
