@@ -7,14 +7,14 @@ router.get("/users", getAllUsers)
 
 // Регистрация пользователя
 router.post("/register", async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, movies } = req.body;
 
     if (!username || !password) {
         return res.status(400).json({ error: "Username and password are required" });
     }
 
     try {
-        const newUser = new User({ username, password });
+        const newUser = new User({ username, password, movies });
         /* */
         const existingUser = await User.findOne({ username });
         if (existingUser) {
