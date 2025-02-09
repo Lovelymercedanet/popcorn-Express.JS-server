@@ -3,7 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config(); // Для работы с переменными окружения
 const authRoutes = require("./routes/auth");
-const apiRoutes = require("./routes/add_favorite");
+const apiRoutes = require("./routes/movies");
 
 const app = express();
 const PORT = process.env.PORT || 5000;

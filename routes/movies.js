@@ -33,4 +33,31 @@ router.post("/add-favorite", async (req, res) => {
     }
 });
 
+// Получить избранные фильмы пользователя
+router.post("/get-favorites", async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ error: "Username and password are required" });
+    }
+
+    try {
+        // Проверка пользователя и пароля
+        const user = await User.findOne({ username, password });
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found or invalid credentials" });
+        }
+
+        // Возвращаем массив фильмов
+        res.status(200).json({
+            message: "Favorites retrieved successfully",
+            movies: user.movies,
+        });
+    } catch (error) {
+        console.error("Error fetching favorites:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 module.exports = router;
