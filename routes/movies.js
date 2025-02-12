@@ -60,4 +60,34 @@ router.post("/get-favorites", async (req, res) => {
     }
 });
 
+// Удалить фильм из избранного
+router.post("/remove-favorite", async (req, res) => {
+    const { username, movieId } = req.body;
+
+    if (!username || !movieId) {
+        return res.status(400).json({ error: "Username and movieId are required" });
+    }
+
+    try {
+        // Находим пользователя по username и удаляем фильм из массива movies
+        const updatedUser = await User.findOneAndUpdate(
+            { username },
+            { $pull: { movies: { id: movieId } } }, // Удаление фильма по id
+            { new: true } // Возвращает обновлённый документ
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.status(200).json({
+            message: "Movie removed from favorites successfully",
+            movies: updatedUser.movies, // Обновлённый список фильмов
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error removing movie from favorites" });
+    }
+});
+
 module.exports = router;

@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({
             id: String,
             title: String,
             poster_path: String,
+            isAdded: Boolean,
         },
     ],
 });
